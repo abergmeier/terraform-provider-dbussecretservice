@@ -1,6 +1,8 @@
 package secretservice
 
 import (
+	"log"
+
 	"github.com/godbus/dbus/v5"
 	ss "github.com/zalando/go-keyring/secret_service"
 )
@@ -23,6 +25,7 @@ func SearchLogin(searchAttributes map[string]string) ([]ss.Secret, error) {
 	if err != nil {
 		return nil, err
 	}
+	log.Println("[TRACE] Session opened")
 
 	coll := s.GetLoginCollection()
 
@@ -30,11 +33,13 @@ func SearchLogin(searchAttributes map[string]string) ([]ss.Secret, error) {
 	if err != nil {
 		return nil, err
 	}
+	log.Printf("[TRACE] Unlocked %s\n", coll.Path())
 
 	ips, err := s.SearchItems(coll, searchAttributes)
 	if err != nil {
 		return nil, err
 	}
+	log.Printf("[TRACE] Found %d Items\n", len(ips))
 
 	ret := make([]ss.Secret, len(ips))
 	for i := range ips {
@@ -42,6 +47,7 @@ func SearchLogin(searchAttributes map[string]string) ([]ss.Secret, error) {
 		if err != nil {
 			return nil, err
 		}
+		log.Printf("[TRACE] Read Secret %s\n", ips[i])
 
 		ret[i] = *sec
 	}
