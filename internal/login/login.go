@@ -1,6 +1,9 @@
 package login
 
 import (
+	"strings"
+
+	"github.com/abergmeier/terraform-provider-dbussecretservice/internal/datasource"
 	"github.com/abergmeier/terraform-provider-dbussecretservice/internal/secretservice"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -39,10 +42,12 @@ func read(d *schema.ResourceData, meta interface{}) error {
 
 	tfAttrs := d.Get("attributes").(map[string]interface{})
 
+	attrStrings := make([]string, 0, len(tfAttrs))
 	attrs := make(map[string]string, len(tfAttrs))
 	for k, vi := range tfAttrs {
 		v := vi.(string)
 		attrs[k] = v
+		attrStrings = append(attrStrings, k+":"+v)
 	}
 
 	secrets, err := secretservice.SearchLogin(attrs)
@@ -57,5 +62,8 @@ func read(d *schema.ResourceData, meta interface{}) error {
 	d.Set("parameters", secrets[0].Parameters)
 	d.Set("content_type", secrets[0].ContentType)
 	d.Set("value", secrets[0].Value)
+
+	combinedAttrs := strings.Join(append(attrStrings, datasource.AlwaysUniqueID()), "_")
+	d.SetId(combinedAttrs)
 	return nil
 }
