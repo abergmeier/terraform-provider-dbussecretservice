@@ -59,9 +59,26 @@ func read(d *schema.ResourceData, meta interface{}) error {
 		return nil
 	}
 
-	d.Set("parameters", secrets[0].Parameters)
-	d.Set("content_type", secrets[0].ContentType)
-	d.Set("value", secrets[0].Value)
+	if secrets[0].Parameters == nil {
+		err = d.Set("parameters", nil)
+	} else {
+		err = d.Set("parameters", string(secrets[0].Parameters))
+	}
+
+	if err != nil {
+		return err
+	}
+
+	err = d.Set("content_type", secrets[0].ContentType)
+	if err != nil {
+		return err
+	}
+
+	if secrets[0].Value == nil {
+		err = d.Set("value", nil)
+	} else {
+		err = d.Set("value", string(secrets[0].Value))
+	}
 
 	combinedAttrs := strings.Join(append(attrStrings, datasource.AlwaysUniqueID()), "_")
 	d.SetId(combinedAttrs)
