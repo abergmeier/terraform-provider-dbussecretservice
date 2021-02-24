@@ -12,6 +12,7 @@ func Resource() *schema.Resource {
 				Type:        schema.TypeMap,
 				Required:    true,
 				Description: "Attributes to search for",
+				ForceNew:    true,
 			},
 			"parameters": {
 				Type:        schema.TypeString,
