@@ -11,7 +11,7 @@ import (
 func Provider() *schema.Provider {
 	provider := &schema.Provider{
 		DataSourcesMap: map[string]*schema.Resource{
-			"dbus_secretservice_login": login.Resource(),
+			"dbussecretservice_login": login.Resource(),
 		},
 		Schema: map[string]*schema.Schema{},
 	}
