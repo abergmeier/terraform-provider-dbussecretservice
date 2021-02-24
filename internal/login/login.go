@@ -36,7 +36,12 @@ func Resource() *schema.Resource {
 
 func read(d *schema.ResourceData, meta interface{}) error {
 
-	attrs := d.Get("attributes").(map[string]string)
+	tfAttrs := d.Get("attributes").(map[string]interface{})
+
+	attrs := make(map[string]string, len(tfAttrs))
+	for i := range tfAttrs {
+		attrs[i] = tfAttrs[i].(string)
+	}
 
 	secrets, err := secretservice.SearchLogin(attrs)
 	if err != nil {
