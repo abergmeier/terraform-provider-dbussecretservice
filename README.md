@@ -1,3 +1,6 @@
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/abergmeier/terraform-provider-dbussecretservice)](https://github.com/abergmeier/terraform-provider-dbussecretservice/releases/latest)
+[![License](https://img.shields.io/github/license/abergmeier/terraform-provider-dbussecretservice)](https://github.com/abergmeier/terraform-provider-dbussecretservice/blob/master/LICENSE)
+
 # terraform-provider-dbussecretservice
 
 ## Example use case
